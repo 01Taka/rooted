@@ -9,6 +9,7 @@ export interface LearningTargetSM2State {
 
 export interface LearningTargetSM2TargetData {
   state: LearningTargetSM2State;
+  lastQuality: number;
   lastActiveAt: number;
   nextReviewDate: number;
 }

@@ -1,13 +1,4 @@
 /**
- * 評価モードを表すリテラル型
- * - 'TAP': タップ操作のみ (valueなし)
- * - 'PASS_FAIL': 合格/不合格 (true/false)
- * - 'STAR': 星評価 (0から5の整数)
- * - 'SCORE': スコア評価 (0から100の浮動小数点数)
- */
-export type LearningTargetEvaluationMode = 'TAP' | 'PASS_FAIL' | 'STAR' | 'SCORE';
-
-/**
  * 評価モード 'TAP' に対応する UserEvaluation
  * value は存在しない (undefined)
  */

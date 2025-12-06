@@ -9,6 +9,7 @@ export interface SM2State {
 
 export interface SM2TargetData {
   state: SM2State;
+  lastQuality: number;
   lastActiveAt: number;
   nextReviewDate: number;
 }

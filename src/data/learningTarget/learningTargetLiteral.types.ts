@@ -6,7 +6,7 @@ export type LearningTargetManagementMode = 'TARGET' | 'SPLIT';
  * 植物（学習目標）の成長段階
  * ユーザーのコミットメントレベルと知識の定着度を示す
  */
-export type LearningTargetState =
+export type LearningTargetStage =
   | 'SPROUTING' // 芽を植える
   | 'BUDDING' // つぼみをつける
   | 'BLOOMING' // 花をめでる

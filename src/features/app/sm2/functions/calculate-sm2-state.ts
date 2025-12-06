@@ -1,5 +1,5 @@
-import { UserEvaluation } from '../../learningTarget/types/update-learning-target.types';
-import { DEFAULT_SM2_STATE, SM2_SCHEDULER_PARAMS } from '../constants/sm2-schedule-constants';
+import { UserEvaluation } from '../../learningTarget/types/user-evaluation.types';
+import { DEFAULT_SM2_STATE, SM2_SCHEDULER_PARAMS } from '../constants/sm2-constants';
 import { SM2State, SM2TargetData } from '../types/sm2-types';
 import { calculateSM2Quality } from './calculate-sm2-quality';
 
@@ -78,6 +78,7 @@ export function updateSM2TargetData(
 
   return {
     state: newState,
+    lastQuality: qualityScore,
     lastActiveAt: now, // 最後に活動した日時を現在時刻に更新
     nextReviewDate: nextReviewDate,
   };

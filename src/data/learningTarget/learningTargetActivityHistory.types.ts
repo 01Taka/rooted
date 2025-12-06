@@ -1,39 +1,67 @@
 import { LearningTargetActivity } from './learningTargetActivity.types';
-import { LearningTargetManagementMode, LearningTargetState } from './learningTargetLiteral.types';
+import { LearningTargetManagementMode, LearningTargetStage } from './learningTargetLiteral.types';
 
-type ActivityHistoryItemWithTransition = {
+// ----------------------------------------------------------------------
+// 共通の基盤となる型
+// ----------------------------------------------------------------------
+
+/** 履歴アイテムの共通基本プロパティ */
+type ActivityHistoryItemCommon = {
   managementMode: LearningTargetManagementMode;
+  /** このデータが温室内での復習かどうか */
+  isInGreenhouse: boolean;
   /** このアクティビティ発生時の植物の状態 */
-  stateAtActivity: LearningTargetState;
-  didStateTransition: true;
-  newState: LearningTargetState;
+  stageAtActivity: LearningTargetStage;
 };
 
-type ActivityHistoryItemWithoutTransition = {
-  managementMode: LearningTargetManagementMode;
-  /** このアクティビティ発生時の植物の状態 */
-  stateAtActivity: LearningTargetState;
+// ----------------------------------------------------------------------
+// 状態遷移 (State Transition) に関連する型
+// ----------------------------------------------------------------------
+
+/** 状態が遷移したアクティビティ履歴アイテム */
+type ActivityHistoryItemWithTransition = ActivityHistoryItemCommon & {
+  didStateTransition: true;
+  newStage: LearningTargetStage;
+};
+
+/** 状態が遷移しなかったアクティビティ履歴アイテム */
+type ActivityHistoryItemWithoutTransition = ActivityHistoryItemCommon & {
   didStateTransition: false;
 };
 
+/** 状態遷移の有無を含む履歴アイテムの基本型 (判別可能なユニオン型) */
 type ActivityHistoryItemBase =
   | ActivityHistoryItemWithTransition
   | ActivityHistoryItemWithoutTransition;
 
+// ----------------------------------------------------------------------
+// 管理モード (Management Mode) に関連する型
+// ----------------------------------------------------------------------
+
+/** TARGET モードの履歴アイテム */
 type ActivityHistoryTargetItem = ActivityHistoryItemBase & {
   managementMode: 'TARGET';
   activity: LearningTargetActivity;
 };
 
-type ActivityHistorySpritItem = ActivityHistoryItemBase & {
-  managementMode: 'SPLIT';
-  activeUnits: {
-    id: string;
-    unitPath: string; // 履歴の時点でのパス。パスが更新されてもこちらは更新されない
-    activity: LearningTargetActivity;
-  }[];
+/** SPLIT モードの履歴アイテムで使用されるユニット情報 */
+type SplitUnitActivity = {
+  id: string;
+  unitPath: string; // 履歴の時点でのパス。パスが更新されてもこちらは更新されない
+  activity: LearningTargetActivity;
 };
 
+/** SPLIT モードの履歴アイテム */
+type ActivityHistorySplitItem = ActivityHistoryItemBase & {
+  managementMode: 'SPLIT';
+  activeUnits: SplitUnitActivity[];
+};
+
+// ----------------------------------------------------------------------
+// 最終的なエクスポート型
+// ----------------------------------------------------------------------
+
+/** 全ての学習履歴アクティビティ履歴アイテム */
 export type LearningHistoryActivityHistoryItem =
   | ActivityHistoryTargetItem
-  | ActivityHistorySpritItem;
+  | ActivityHistorySplitItem;

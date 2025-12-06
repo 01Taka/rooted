@@ -1,4 +1,4 @@
-import { UserEvaluation } from '../../learningTarget/types/update-learning-target.types';
+import { UserEvaluation } from '../../learningTarget/types/user-evaluation.types';
 
 /**
  * SM-2アルゴリズムのQuality (Q値: 0〜5) を計算する

@@ -1,30 +1,33 @@
-import { ReviewNecessityStage } from '../../review-necessity/types/review-necessity-types';
+import { SM2State } from '../types/sm2-types';
 
 /**
- * 時間によるQualityスコア補正に関するパラメータ群。
- * Level 0とLevel 1で異なる遅延閾値を定義します。
+ * SM-2スケジューリング計算に関するパラメータ群。
  */
-export const SM2_TIME_PARAMS = {
-  FAST_THRESHOLD: 0.7, // 基準時間の70%未満 → 速い
-  SLOW_THRESHOLD_Q5: 1.05, // Level 0 (Q5) の減点閾値: 基準時間の105%以上
-  SLOW_THRESHOLD_Q4: 1.3, // Level 1 (Q4) の減点閾値: 基準時間の130%以上
-  ADJUSTMENT_STEP: 1, // 調整幅 (±1)
-  MIN_QUALITY_AFTER_ADJ: 3, // 調整後の最小値
-  MAX_QUALITY_AFTER_ADJ: 5, // 調整後の最大値
-  TIME_RATIO_LIMIT: 5.0, // timeRatioの上限 (5倍)
+export const SM2_SCHEDULER_PARAMS = {
+  // 状態初期値
+  INITIAL_EF: 2.5, // 初期易しさ係数 (EF)
+  // Quality < 3 の時のリセット値
+  RESET_INTERVAL: 1, // 忘却時の間隔リセット値 (日数)
+  RESET_REPETITIONS: 0, // 忘却時の連続正解回数リセット値
+  // 最初の復習間隔 (日数)
+  FIRST_INTERVAL: 1, // 1回目 (n=0 -> n=1) の間隔
+  SECOND_INTERVAL: 6, // 2回目 (n=1 -> n=2) の間隔
+  // EF更新に関する係数
+  EF_ADJUSTMENT_COEFFICIENT_A: 0.1,
+  EF_ADJUSTMENT_COEFFICIENT_B: 0.08,
+  EF_ADJUSTMENT_COEFFICIENT_C: 0.02,
+  // EFの下限
+  MIN_EF: 1.3,
+  MAX_EF: 3.0,
+  // 即時復習の間隔 (ms): 間隔が1日未満の場合に適用
+  IMMEDIATE_REVIEW_MS: 1 * 60 * 60 * 1000, // 1時間
 } as const;
 
 /**
- * 復習必要度レベル → SM-2 Qualityスコア対応表。
+ * SM-2の状態初期値 (問題がまだ学習されていない場合)
  */
-export const SM2_QUALITY_MAP: Record<ReviewNecessityStage, number> = {
-  0: 5, // 理解済み (Level 0)
-  1: 4, // 不完全正解 (Level 1)
-  2: 2, // 不安定/部分忘却 (Level 2)
-  3: 0, // 忘却 (Level 3)
+export const DEFAULT_SM2_STATE: SM2State = {
+  interval: 0,
+  easeFactor: SM2_SCHEDULER_PARAMS.INITIAL_EF,
+  repetitions: 0,
 } as const;
-
-// 基準時間が取得できない場合のデフォルト値
-export const DEFAULT_REF_TIME_MS = 5000;
-// 基準時間が取得できない場合のデフォルト値
-export const DEFAULT_CATEGORY_ID = 'default';

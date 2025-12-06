@@ -3,12 +3,16 @@ import { LearningTargetConsecutiveDays } from '@/data/learningTarget/learningTar
 import { LearningTargetStage } from '@/data/learningTarget/learningTargetLiteral.types';
 import { LearningTargetUnitWithSM2 } from '@/data/learningTarget/learningTargetUnit.types';
 import { updateSM2TargetData } from '../../../sm2/functions/calculate-sm2-state';
-import { MIN_HIGH_QUALITY_SCORE, TARGET_ROOT_ID } from '../../constants/main-constants';
+import {
+  MAX_RESET_BLOCK_COUNT,
+  MIN_HIGH_QUALITY_SCORE,
+  TARGET_ROOT_ID,
+} from '../../constants/main-constants';
 import { UserEvaluation } from '../../types/user-evaluation.types';
 import { checkPromotionConditions } from './supports/check-promotion-conditions';
 import { getCommitmentQualityScores } from './supports/get-commitment-quality-scores';
+import { updateConsecutiveDays } from './supports/update-consecutive-days';
 import { updateUnitsSM2State } from './supports/update-split-units-sm2';
-import { updateConsecutiveDays } from './update-consecutive-days';
 
 export interface CalculatedNextStageData {
   /** 昇格先のステージ名 ('BUDDING', 'BLOOMING', 'HALL_OF_FAME') または null */
@@ -40,20 +44,23 @@ export function calculateNextStageData(
 
   // 2. 昇格判定に必要な引数の計算と、それに伴う状態更新データのシミュレーション
 
-  let newConsecutiveDaysData = null;
-  let newAchievedHighQualityUnitIds = null;
-  let updatedUnitsWithSM2 = null;
+  let newConsecutiveDaysData: LearningTargetConsecutiveDays | null = null;
+  let newAchievedHighQualityUnitIds: string[] | null = null;
+  let updatedUnitsWithSM2: Record<string, LearningTargetUnitWithSM2> | null = null;
   let sm2NextReviewDates: number[] = [];
   let isSuccessPathAchieved = false;
 
   // --- BUDDING ステージの更新データシミュレーション ---
   if (state.stage === 'BUDDING') {
     // 連続日数の計算
-    newConsecutiveDaysData = updateConsecutiveDays(
-      state.consecutiveDaysData,
-      lastCommitmentAt,
-      now
-    );
+    newConsecutiveDaysData = lastCommitmentAt
+      ? updateConsecutiveDays(state.consecutiveDaysData, lastCommitmentAt, now)
+      : {
+          consecutiveDays: 1,
+          lastResetBlockChargedAt: now,
+          lastResetBlockUsedAt: null,
+          resetBlockCount: MAX_RESET_BLOCK_COUNT,
+        };
 
     // 成果パス達成済みユニットIDの更新シミュレーションと達成判定
     let tempAchievedIds = [...state.achievedHighQualityUnitIds];

@@ -14,7 +14,7 @@ export interface LearningTarget {
   /** 主要な状態を表すデータオブジェクト。温室での復習では更新されない */
   state: LearningTargeMainState;
   /** スロット内で最後に復習した日時。温室での復習では更新されない */
-  lastCommitmentAt: number;
+  lastCommitmentAt: number | null;
   /** スロット内で復習した回数。温室での復習では更新されない */
   totalCommitmentCount: number;
 

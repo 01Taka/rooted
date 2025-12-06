@@ -39,30 +39,32 @@ export function calculateUpdatedData(
     calculatedStageData;
 
   const currentStage = currentLearningTarget.state.stage;
-  const stagePromotion = !!nextStage && nextStage !== currentStage; // 2. SM2運用ステージのデータ更新（昇格時または通常運用時）
+  const stagePromotion = !!nextStage && nextStage !== currentStage;
 
   let updatedTargetSM2 = null;
 
-  const isSM2Stage =
+  // 2. SM2運用ステージのデータ更新（昇格時または通常運用時）
+  // HALL_OF_FAME は「絶対保護」期間であり、自主的な評価でSM2のデータを更新しないように除外します。
+  const shouldUpdateSM2 =
     nextStage === 'BLOOMING' ||
-    nextStage === 'MASTERED' ||
-    nextStage === 'HALL_OF_FAME' ||
-    (!stagePromotion &&
-      (currentStage === 'BLOOMING' ||
-        currentStage === 'MASTERED' ||
-        currentStage === 'HALL_OF_FAME'));
+    nextStage === 'MASTERED' || // 昇格先がBLOOMING/MASTEREDの場合
+    (!stagePromotion && (currentStage === 'BLOOMING' || currentStage === 'MASTERED')); // 昇格なしで現在がBLOOMING/MASTEREDの場合
+  // HALL_OF_FAME の場合は SM2 を更新しないため、条件に含めない。
 
-  if (isSM2Stage) {
+  if (shouldUpdateSM2) {
     if (currentLearningTarget.state.managementMode === 'TARGET') {
       // TARGETモード: SM2データを計算
       const rootEvaluation = Object.values(evaluations)[0];
       const currentSM2Data =
         (currentLearningTarget.state as any).sm2Data || {}; /* ステージ移行時の初期値 */
       updatedTargetSM2 = updateSM2TargetData(currentSM2Data, rootEvaluation, now);
-    } // SPLITモードの unitsWithSM2 は、`calculateNextStageData`が既に計算している前提
-    // （元のコードの`updatedUnitsWithSM2`がこれに相当）
+    }
+    // SPLITモードの updatedUnitsWithSM2 は、`calculateNextStageData` が既に計算している前提
+    // (calculateNextStageData は BLOOMING/MASTERED でのみ更新をシミュレーションするため、HALL_OF_FAME期間中の更新は発生しない)
   } else {
-    updatedUnitsWithSM2 = null; // SM2ステージ以外では不要なためクリア
+    // SM2を更新しないステージの場合、計算結果をnullに設定
+    updatedUnitsWithSM2 = null;
+    updatedTargetSM2 = null;
   }
 
   const predictedMasteredSlotExpiresAt = getHallOfFameExpiry(now);

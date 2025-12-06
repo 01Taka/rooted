@@ -3,7 +3,7 @@ import {
   INITIAL_CONSECUTIVE_DAYS,
   MAX_RESET_BLOCK_COUNT,
   ONE_DAY_MS,
-} from '../../constants/main-constants';
+} from '../../../constants/main-constants';
 
 /**
  * 連続日数を更新し、リセットブロックの消費/チャージ判定を行います。

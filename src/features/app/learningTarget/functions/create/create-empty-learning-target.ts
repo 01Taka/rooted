@@ -19,6 +19,7 @@ export function createEmptyLearningTarget(id: string, title: string): LearningTa
     managementMode: 'TARGET',
     stage: 'SPROUTING',
     sproutingPromotionCount: 0,
+    lastCountIncrementedAt: null,
     // sm2Data は SPROUTING のため undefined
   };
 

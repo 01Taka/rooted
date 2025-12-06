@@ -58,6 +58,7 @@ export interface TargetModeSprouting extends LearningTargetMainStateBase {
   managementMode: 'TARGET';
   stage: 'SPROUTING';
   sproutingPromotionCount: number;
+  lastCountIncrementedAt: number | null;
   sm2Data?: undefined;
 }
 
@@ -106,6 +107,7 @@ export interface SplitModeSprouting extends LearningTargetMainStateBase {
   managementMode: 'SPLIT';
   stage: 'SPROUTING';
   sproutingPromotionCount: number;
+  lastCountIncrementedAt: number | null;
   units: Record<string, LearningTargetUnitWithoutSM2>;
 }
 

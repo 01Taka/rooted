@@ -1,4 +1,10 @@
 import { UserEvaluation } from '../../learningTarget/types/user-evaluation.types';
+import {
+  FIXED_QUALITY_MAP,
+  Quality,
+  SCORE_QUALITY_THRESHOLDS,
+  STAR_MAX_QUALITY,
+} from '../constants/sm2-quality-constants';
 
 /**
  * SM-2アルゴリズムのQuality (Q値: 0〜5) を計算する

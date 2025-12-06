@@ -5,10 +5,10 @@ import { LearningTargetConsecutiveDays } from '@/data/learningTarget/learningTar
 import { LearningTargetStage } from '@/data/learningTarget/learningTargetLiteral.types';
 import { LearningTargetSM2TargetData } from '@/data/learningTarget/learningTargetSM2.types';
 import { LearningTargetUnitWithSM2 } from '@/data/learningTarget/learningTargetUnit.types';
-import { updateSM2TargetData } from '../../sm2/functions/calculate-sm2-state';
-import { UserEvaluation } from '../types/user-evaluation.types';
+import { updateSM2TargetData } from '../../../sm2/functions/calculate-sm2-state';
+import { UserEvaluation } from '../../types/user-evaluation.types';
 import { calculateNextStageData } from './calculate-next-stage-data';
-import { getHallOfFameExpiry } from './get-hall-of-fame-expiry';
+import { getHallOfFameExpiry } from './supports/get-hall-of-fame-expiry';
 
 // （既存のcalculateNextStageDataの結果の型を拡張した型を仮定します）
 export type LearningTargetUpdateData = {

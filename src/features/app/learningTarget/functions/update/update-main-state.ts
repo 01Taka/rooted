@@ -1,5 +1,5 @@
 import { LearningTarget } from '@/data/learningTarget/learningTarget.types';
-import { UserEvaluation } from '../types/user-evaluation.types';
+import { UserEvaluation } from '../../types/user-evaluation.types';
 import { applyCalculatedData } from './applyCalculatedData';
 import { calculateUpdatedData } from './calculate-updated-data';
 

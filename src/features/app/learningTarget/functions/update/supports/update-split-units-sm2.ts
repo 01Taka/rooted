@@ -1,6 +1,6 @@
 import { LearningTargetUnitWithSM2 } from '@/data/learningTarget/learningTargetUnit.types';
-import { updateSM2TargetData } from '../../sm2/functions/calculate-sm2-state';
-import { UserEvaluation } from '../types/user-evaluation.types';
+import { updateSM2TargetData } from '../../../../sm2/functions/calculate-sm2-state';
+import { UserEvaluation } from '../../../types/user-evaluation.types';
 
 /**
  * SPLITモードでSM-2運用中のユニット群に対し、評価結果に基づいてSM-2データを更新します。

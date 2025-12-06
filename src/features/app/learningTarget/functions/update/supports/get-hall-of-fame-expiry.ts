@@ -1,4 +1,4 @@
-import { HALL_OF_FAME_DAYS, ONE_DAY_MS } from '../constants/main-constants';
+import { HALL_OF_FAME_DAYS, ONE_DAY_MS } from '../../../constants/main-constants';
 
 /**
  * HALL_OF_FAME の特典期間終了日時を計算します (150日後)。

@@ -9,8 +9,8 @@ import {
   TargetModeHallOfFame,
 } from '@/data/learningTarget/learningTargetMainState.types';
 import { LearningTargetUpdateData } from './calculate-updated-data';
-import { createStageTransitionHistoryItem } from './create-stage-transition-history-item';
 import { getRepresentativeUnitId } from './get-representative-unit-id';
+import { createStageTransitionHistoryItem } from './supports/create-stage-transition-history-item';
 
 /**
  * 計算されたデータと現在時刻を受け取り、学習ターゲットの状態を更新した新しいオブジェクトを返します。

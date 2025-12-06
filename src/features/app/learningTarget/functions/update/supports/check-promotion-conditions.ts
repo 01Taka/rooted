@@ -4,7 +4,7 @@ import {
   HALL_OF_FAME_DAYS_THRESHOLD,
   ONE_DAY_MS,
   SPROUTING_TO_BUDDING_COUNT,
-} from '../constants/main-constants';
+} from '../../../constants/main-constants';
 
 /**
  * 昇格条件の判定に必要なデータ構造

@@ -2,13 +2,13 @@ import { LearningTarget } from '@/data/learningTarget/learningTarget.types';
 import { LearningTargetConsecutiveDays } from '@/data/learningTarget/learningTargetConsecutiveDays.types';
 import { LearningTargetStage } from '@/data/learningTarget/learningTargetLiteral.types';
 import { LearningTargetUnitWithSM2 } from '@/data/learningTarget/learningTargetUnit.types';
-import { updateSM2TargetData } from '../../sm2/functions/calculate-sm2-state';
-import { MIN_HIGH_QUALITY_SCORE, TARGET_ROOT_ID } from '../constants/main-constants';
-import { UserEvaluation } from '../types/user-evaluation.types';
-import { checkPromotionConditions } from './check-promotion-conditions';
-import { getCommitmentQualityScores } from './get-commitment-quality-scores';
+import { updateSM2TargetData } from '../../../sm2/functions/calculate-sm2-state';
+import { MIN_HIGH_QUALITY_SCORE, TARGET_ROOT_ID } from '../../constants/main-constants';
+import { UserEvaluation } from '../../types/user-evaluation.types';
+import { checkPromotionConditions } from './supports/check-promotion-conditions';
+import { getCommitmentQualityScores } from './supports/get-commitment-quality-scores';
+import { updateUnitsSM2State } from './supports/update-split-units-sm2';
 import { updateConsecutiveDays } from './update-consecutive-days';
-import { updateUnitsSM2State } from './update-split-units-sm2';
 
 export interface CalculatedNextStageData {
   /** 昇格先のステージ名 ('BUDDING', 'BLOOMING', 'HALL_OF_FAME') または null */

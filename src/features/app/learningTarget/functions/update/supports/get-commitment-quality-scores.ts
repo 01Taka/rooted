@@ -1,6 +1,6 @@
-import { calculateSM2Quality } from '../../sm2/functions/calculate-sm2-quality';
-import { TARGET_ROOT_ID } from '../constants/main-constants';
-import { UserEvaluation } from '../types/user-evaluation.types';
+import { calculateSM2Quality } from '../../../../sm2/functions/calculate-sm2-quality';
+import { TARGET_ROOT_ID } from '../../../constants/main-constants';
+import { UserEvaluation } from '../../../types/user-evaluation.types';
 
 /**
  * ユーザー評価データからSM-2 Qualityスコアを計算し、ユニットID（またはターゲットモードID）をキーとする

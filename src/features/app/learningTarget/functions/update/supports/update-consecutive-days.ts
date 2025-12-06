@@ -7,11 +7,11 @@ import {
 
 /**
  * 連続日数を更新し、リセットブロックの消費/チャージ判定を行います。
- * * 新ロジック:
- * - 欠席日数（diffDays - 1）分のブロックを消費する。
- * - ブロックが足りない場合、連続日数をリセットし、ブロックをMAXまで1づつチャージする。
- * - 翌日コミットの場合 (diffDays === 1)、連続日数をインクリメントし、ブロックをMAXまでチャージする。
- * - 同日コミットの場合 (diffDays === 0)、更新は行われない。
+ * * 仕様に合わせたロジック変更点:
+ * 1. 欠席によりブロックを消費した場合、連続日数はインクリメントされ記録が維持される。
+ * 2. 欠席をブロックで防いだ場合、リセットブロックは減るが、直ちに回復はしない。
+ * 3. ブロックを消費した後の最初の取り組み (diffDays = 1) で、ブロックを1つ再チャージする。
+ * 4. ブロックが足りない場合、連続日数をリセットし、リセットブロックは回復を待つ状態（MAXまで回復しない）。
  * * @param currentData 現在の連続日数データ
  * @param lastCommitmentAt 前回のコミットメント時刻
  * @param now 現在時刻
@@ -42,11 +42,16 @@ export function updateConsecutiveDays(
   if (diffDays === 0) return currentData;
 
   if (diffDays === 1) {
-    // 2. 翌日の場合：連続日数をインクリメント。ブロックをMAXまで1づつチャージ。
+    // 2. 翌日の場合：連続日数をインクリメント。リセットブロックの再チャージ判定。
     consecutiveDays += 1;
+
+    // --- 【修正ロジック】 リセットブロックのチャージ ---
+    // 設計: 「1回取り組む」ことで再チャージされる
+    // => ブロックがMAX未満であれば、1つだけ回復させる。毎日回復する仕様は不適切。
+    // MAX_RESET_BLOCK_COUNT=1 の場合、ブロックが0の時のみ回復する。
     if (resetBlockCount < MAX_RESET_BLOCK_COUNT) {
-      // 念のためMAX_RESET_BLOCK_COUNTでクリップ
-      resetBlockCount = Math.min(resetBlockCount + 1, MAX_RESET_BLOCK_COUNT);
+      // 1つだけ回復（消費後の「1回」の取り組みと解釈）
+      resetBlockCount += 1;
       lastResetBlockChargedAt = now;
     }
   } else if (diffDays > 1) {
@@ -58,18 +63,19 @@ export function updateConsecutiveDays(
     if (resetBlockCount >= consumedBlocks) {
       // ブロックが足りる場合：ブロックを消費し、連続日数をインクリメント（連続記録を維持）
       resetBlockCount -= consumedBlocks;
+      consecutiveDays += 1; // 連続日数は維持されるため、1日分進める
       lastResetBlockUsedAt = now;
-      consecutiveDays += 1;
     } else {
-      // ブロックが足りない場合：連続記録をリセットし、ブロックをMAXまでチャージ。
+      // ブロックが足りない場合：連続記録をリセット。
       consecutiveDays = INITIAL_CONSECUTIVE_DAYS;
+      // 記録リセット後は、初期値(1)に戻す
       resetBlockCount = MAX_RESET_BLOCK_COUNT;
-      lastResetBlockChargedAt = now;
     }
   }
-  // diffDaysが負になることは通常想定しませんが、負の場合は何もしない（記録が未来日になるため）
 
+  // 更新されたデータを返す
   return {
+    ...currentData,
     consecutiveDays,
     resetBlockCount,
     lastResetBlockUsedAt,

@@ -5,8 +5,10 @@ import {
   SplitModeBudding,
   SplitModeHallOfFame,
   SplitModeMastered,
+  SplitModeSprouting,
   TargetModeBlooming,
   TargetModeHallOfFame,
+  TargetModeSprouting,
 } from '@/data/learningTarget/learningTargetMainState.types';
 import { LearningTargetUpdateData } from './calculate-updated-data';
 import { createStageTransitionHistoryItem } from './supports/create-stage-transition-history-item';
@@ -33,6 +35,7 @@ export function applyCalculatedData(
     updatedTargetSM2,
     stagePromotion,
     predictedMasteredSlotExpiresAt,
+    newTotalValidCommitmentCount,
   } = calculatedData;
 
   const currentStage = currentLearningTarget.state.stage;
@@ -117,7 +120,16 @@ export function applyCalculatedData(
     }
   } else // 3. --- ステージ昇格なしの場合の、データのインクリメンタル更新 ---
   {
-    if (currentStage === 'BUDDING') {
+    if (currentStage === 'SPROUTING') {
+      if (newTotalValidCommitmentCount === null) {
+        throw new Error('Missing sproutingPromotionCount for not promotion sprouting');
+      }
+      const currentState = updatedLearningTarget.state as SplitModeSprouting | TargetModeSprouting;
+      newState = {
+        ...currentState,
+        sproutingPromotionCount: newTotalValidCommitmentCount,
+      };
+    } else if (currentStage === 'BUDDING') {
       // BUDDING ステージの更新
       const currentState = updatedLearningTarget.state as SplitModeBudding;
       newState = {

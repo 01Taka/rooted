@@ -6,6 +6,7 @@ import { updateSM2TargetData } from '../../../sm2/functions/calculate-sm2-state'
 import {
   MAX_RESET_BLOCK_COUNT,
   MIN_HIGH_QUALITY_SCORE,
+  SPROUTING_COMMITMENT_COOL_DOWN_MS,
   TARGET_ROOT_ID,
 } from '../../constants/main-constants';
 import { UserEvaluation } from '../../types/user-evaluation.types';
@@ -26,6 +27,9 @@ export interface CalculatedNextStageData {
 
   /** SM-2更新をシミュレートした後のユニットのレコード (SPLIT/TARGETモードのBLOOMING以降で使用。それ以外ではnull) */
   updatedUnitsWithSM2: Record<string, LearningTargetUnitWithSM2> | null;
+
+  /** 芽の状態で十分な間隔を置いてコミットされた回数 */
+  newTotalValidCommitmentCount: number | null;
 }
 
 /**
@@ -36,7 +40,7 @@ export function calculateNextStageData(
   evaluations: Record<string, UserEvaluation>,
   now = Date.now()
 ): CalculatedNextStageData {
-  const { state, totalCommitmentCount, lastCommitmentAt } = learningTarget;
+  const { state, lastCommitmentAt } = learningTarget;
   const isTargetMode = state.managementMode === 'TARGET';
 
   // 1. Qualityスコアの計算と正規化
@@ -102,10 +106,20 @@ export function calculateNextStageData(
     }
   }
 
+  const lastCommitment = learningTarget.lastCommitmentAt ?? 0;
+  const isSproutingCommitmentValid =
+    learningTarget.state.stage === 'SPROUTING'
+      ? now - lastCommitment >= SPROUTING_COMMITMENT_COOL_DOWN_MS
+      : false;
+  const sproutingPromotionCount =
+    learningTarget.state.stage === 'SPROUTING' && isSproutingCommitmentValid
+      ? learningTarget.state.sproutingPromotionCount + 1
+      : null;
+
   // 3. 次のステージを判定するためのヘルパー関数を呼び出し
   const nextStage = checkPromotionConditions({
     currentStage: state.stage,
-    newTotalCommitmentCount: totalCommitmentCount + 1,
+    newTotalCommitmentCount: sproutingPromotionCount ?? 0,
     newConsecutiveDays: newConsecutiveDaysData?.consecutiveDays ?? 0,
     isSuccessPathAchieved: isSuccessPathAchieved,
     sm2NextReviewDates: sm2NextReviewDates,
@@ -118,5 +132,6 @@ export function calculateNextStageData(
     newConsecutiveDaysData, // BUDDING のみ値を持つ
     newAchievedHighQualityUnitIds, // BUDDING のみ値を持つ
     updatedUnitsWithSM2, // BLOOMING/MASTERED のみ値を持つ (SPLITモードのみ)
+    newTotalValidCommitmentCount: sproutingPromotionCount,
   };
 }

@@ -6,6 +6,7 @@ import { LearningTargetStage } from '@/data/learningTarget/learningTargetLiteral
 import { LearningTargetSM2TargetData } from '@/data/learningTarget/learningTargetSM2.types';
 import { LearningTargetUnitWithSM2 } from '@/data/learningTarget/learningTargetUnit.types';
 import { updateSM2TargetData } from '../../../sm2/functions/calculate-sm2-state';
+import { SPROUTING_COMMITMENT_COOL_DOWN_MS } from '../../constants/main-constants';
 import { UserEvaluation } from '../../types/user-evaluation.types';
 import { calculateNextStageData } from './calculate-next-stage-data';
 import { getHallOfFameExpiry } from './supports/get-hall-of-fame-expiry';
@@ -19,6 +20,7 @@ export type LearningTargetUpdateData = {
   updatedTargetSM2: LearningTargetSM2TargetData | null; // TARGETモード用: SM2適用済みデータ
   stagePromotion: boolean; // ステージ昇格があったかどうか
   predictedMasteredSlotExpiresAt: number;
+  newTotalValidCommitmentCount: number | null;
 };
 
 /**
@@ -35,8 +37,13 @@ export function calculateUpdatedData(
 ): LearningTargetUpdateData {
   // 1. 次のステージと基本的な更新データを計算
   const calculatedStageData = calculateNextStageData(currentLearningTarget, evaluations, now);
-  let { nextStage, newConsecutiveDaysData, newAchievedHighQualityUnitIds, updatedUnitsWithSM2 } =
-    calculatedStageData;
+  let {
+    nextStage,
+    newConsecutiveDaysData,
+    newAchievedHighQualityUnitIds,
+    updatedUnitsWithSM2,
+    newTotalValidCommitmentCount,
+  } = calculatedStageData;
 
   const currentStage = currentLearningTarget.state.stage;
   const stagePromotion = !!nextStage && nextStage !== currentStage;
@@ -77,5 +84,6 @@ export function calculateUpdatedData(
     updatedTargetSM2,
     stagePromotion,
     predictedMasteredSlotExpiresAt,
+    newTotalValidCommitmentCount,
   };
 }

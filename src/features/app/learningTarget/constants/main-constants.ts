@@ -12,3 +12,5 @@ export const INITIAL_CONSECUTIVE_DAYS = 1;
 export const MIN_HIGH_QUALITY_SCORE = 3;
 
 export const HALL_OF_FAME_DAYS = 150;
+
+export const SPROUTING_COMMITMENT_COOL_DOWN_MS = ONE_DAY_MS;

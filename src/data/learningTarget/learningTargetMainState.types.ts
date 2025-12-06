@@ -57,6 +57,7 @@ export type TargetModeData =
 export interface TargetModeSprouting extends LearningTargetMainStateBase {
   managementMode: 'TARGET';
   stage: 'SPROUTING';
+  sproutingPromotionCount: number;
   sm2Data?: undefined;
 }
 
@@ -104,6 +105,7 @@ export type SplitModeData =
 export interface SplitModeSprouting extends LearningTargetMainStateBase {
   managementMode: 'SPLIT';
   stage: 'SPROUTING';
+  sproutingPromotionCount: number;
   units: Record<string, LearningTargetUnitWithoutSM2>;
 }
 

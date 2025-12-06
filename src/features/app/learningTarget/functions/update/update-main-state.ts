@@ -12,6 +12,7 @@ import {
 } from '@/data/learningTarget/learningTargetMainState.types';
 import { UserEvaluation } from '../../types/user-evaluation.types';
 import { calculateTransition } from './calculate-transition';
+import { createActivityHistoryItem } from './supports/create-activity-history';
 import { createStageTransitionHistoryItem } from './supports/create-stage-transition-history-item';
 import { getRepresentativeUnitId } from './supports/get-representative-unit-id';
 
@@ -20,31 +21,38 @@ export function updateLearningTargetMainState(
   evaluations: Record<string, UserEvaluation>,
   now: number
 ): LearningTarget {
-  // 1. 計算
+  // 1. 計算 (変更なし)
   const result = calculateTransition(current, evaluations, now);
   const { nextStage, isPromotion } = result;
 
-  // 2. 基本プロパティの更新
-  const updatedTarget: LearningTarget = {
-    ...current,
-    lastCommitmentAt: now,
-    totalCommitmentCount: current.totalCommitmentCount + 1,
-    // 履歴配列のコピー
-    stageTransitionHistory: [...current.stageTransitionHistory],
-  };
+  // 2. 基本プロパティと履歴配列の準備
+  // activityHistory もコピーして新しい配列にする
+  const updatedActivityHistory = [...current.activityHistory];
+  const updatedStageHistory = [...current.stageTransitionHistory];
 
-  // 3. 履歴の追加
+  // 3. アクティビティ履歴の作成と追加
+  const newActivityItem = createActivityHistoryItem(current, evaluations, nextStage, now);
+  updatedActivityHistory.push(newActivityItem); // 末尾に追加 (時系列順)
+
+  // 4. ステージ移行履歴の追加 (変更なし)
   if (isPromotion) {
-    updatedTarget.stageTransitionHistory.push(
+    updatedStageHistory.push(
       createStageTransitionHistoryItem(current.state.stage, nextStage, 'PROMOTION_SUCCESS', now)
     );
   }
 
-  // 4. stateの再構築 (Discriminated Unionによる完全な型安全分岐)
+  const updatedTarget: LearningTarget = {
+    ...current,
+    lastCommitmentAt: now,
+    totalCommitmentCount: current.totalCommitmentCount + 1,
+    stageTransitionHistory: updatedStageHistory,
+    activityHistory: updatedActivityHistory, // 更新した履歴をセット
+  };
+
+  // 5. stateの再構築 (以下、前回のコードと同様)
   let newState: LearningTargeMainState;
   const mode = current.state.managementMode;
 
-  // TypeScriptの制御フロー解析を効かせるため、nextStageで分岐
   switch (nextStage) {
     case 'SPROUTING': {
       if (mode === 'TARGET') {
@@ -70,13 +78,23 @@ export function updateLearningTargetMainState(
     }
 
     case 'BUDDING': {
+      // ... (前回のコードと同じため省略。必要な場合は提示します)
       if (!result.newConsecutiveDaysData || !result.newAchievedHighQualityUnitIds) {
-        throw new Error('Budding data missing during update');
+        // エラーハンドリング: データ欠落時は既存データをフォールバックとして使用することも検討可能
+        // ここでは厳密にチェック
+        if (current.state.stage === 'BUDDING') {
+          // 既存維持
+          const cur = current.state as TargetModeBudding; // or Split
+          result.newConsecutiveDaysData = cur.consecutiveDaysData;
+          result.newAchievedHighQualityUnitIds = cur.achievedHighQualityUnitIds;
+        } else {
+          throw new Error('Budding data missing during update');
+        }
       }
       const commonBudding = {
         stage: 'BUDDING' as const,
-        consecutiveDaysData: result.newConsecutiveDaysData,
-        achievedHighQualityUnitIds: result.newAchievedHighQualityUnitIds,
+        consecutiveDaysData: result.newConsecutiveDaysData!,
+        achievedHighQualityUnitIds: result.newAchievedHighQualityUnitIds!,
       };
 
       if (mode === 'TARGET') {
@@ -97,9 +115,7 @@ export function updateLearningTargetMainState(
 
     case 'BLOOMING':
     case 'MASTERED': {
-      // BLOOMINGとMASTEREDは構造が似ているため共通化可能だが、厳密には分ける
       if (mode === 'TARGET') {
-        // SM-2データ: 新規計算値があればそれを使用、なければ既存維持 (HoFからの降格など特殊ケース考慮)
         const sm2Data = result.newTargetSM2 ?? (current.state as any).sm2Data;
         if (!sm2Data) throw new Error('SM2 data missing for Target Mode Blooming/Mastered');
 
@@ -108,7 +124,7 @@ export function updateLearningTargetMainState(
           managementMode: 'TARGET',
           stage: nextStage,
           sm2Data,
-        } as TargetModeBlooming; // or Mastered
+        } as TargetModeBlooming;
       } else {
         const units = result.newSplitUnitsSM2 ?? (current.state as any).units;
         if (!units) throw new Error('Unit data missing for Split Mode Blooming/Mastered');
@@ -119,14 +135,12 @@ export function updateLearningTargetMainState(
           stage: nextStage,
           units,
           representativeUnitId: getRepresentativeUnitId(units),
-        } as SplitModeBlooming; // or Mastered
+        } as SplitModeBlooming;
       }
       break;
     }
 
     case 'HALL_OF_FAME': {
-      // 殿堂入り期間: SM-2データは既存維持（更新データがあればそれは移行時点のもの）
-      // 期限の更新
       const expiresAt = result.hallOfFameExpiresAt ?? (current.state as any).masteredSlotExpiresAt;
       if (!expiresAt) throw new Error('Expiration date missing for Hall of Fame');
 
@@ -136,7 +150,7 @@ export function updateLearningTargetMainState(
           ...current.state,
           managementMode: 'TARGET',
           stage: 'HALL_OF_FAME',
-          sm2Data,
+          sm2Data, // 維持または移行時のデータ
           masteredSlotExpiresAt: expiresAt,
         } as TargetModeHallOfFame;
       } else {
@@ -145,7 +159,7 @@ export function updateLearningTargetMainState(
           ...current.state,
           managementMode: 'SPLIT',
           stage: 'HALL_OF_FAME',
-          units,
+          units, // 維持または移行時のデータ
           masteredSlotExpiresAt: expiresAt,
           representativeUnitId: getRepresentativeUnitId(units),
         } as SplitModeHallOfFame;

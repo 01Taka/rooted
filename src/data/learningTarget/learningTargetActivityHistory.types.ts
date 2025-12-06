@@ -30,7 +30,7 @@ type ActivityHistoryItemWithoutTransition = ActivityHistoryItemCommon & {
 };
 
 /** 状態遷移の有無を含む履歴アイテムの基本型 (判別可能なユニオン型) */
-type ActivityHistoryItemBase =
+export type ActivityHistoryItemBase =
   | ActivityHistoryItemWithTransition
   | ActivityHistoryItemWithoutTransition;
 
@@ -39,20 +39,20 @@ type ActivityHistoryItemBase =
 // ----------------------------------------------------------------------
 
 /** TARGET モードの履歴アイテム */
-type ActivityHistoryTargetItem = ActivityHistoryItemBase & {
+export type ActivityHistoryTargetItem = ActivityHistoryItemBase & {
   managementMode: 'TARGET';
   activity: LearningTargetActivity;
 };
 
 /** SPLIT モードの履歴アイテムで使用されるユニット情報 */
-type SplitUnitActivity = {
+export type SplitUnitActivity = {
   id: string;
   unitPath: string; // 履歴の時点でのパス。パスが更新されてもこちらは更新されない
   activity: LearningTargetActivity;
 };
 
 /** SPLIT モードの履歴アイテム */
-type ActivityHistorySplitItem = ActivityHistoryItemBase & {
+export type ActivityHistorySplitItem = ActivityHistoryItemBase & {
   managementMode: 'SPLIT';
   activeUnits: SplitUnitActivity[];
 };

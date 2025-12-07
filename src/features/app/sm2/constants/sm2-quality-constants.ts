@@ -1,6 +1,6 @@
 // 評価モードとそれに対応する固定Q値
 export const FIXED_QUALITY_MAP = {
-  TAP: 4 as const,
+  TAP: 3 as const,
   PASS_FAIL_CORRECT: 4 as const,
   PASS_FAIL_INCORRECT: 1 as const,
   SCORE_UNRATED: 0 as const, // 0点や不正な値の場合
@@ -13,8 +13,8 @@ export const SCORE_QUALITY_THRESHOLDS = [
   { quality: 5 as const, minScore: 100 }, // Q5: 完璧 (100点 のみ)
   { quality: 4 as const, minScore: 90 }, // Q4: 優秀 (90点以上)
   { quality: 3 as const, minScore: 80 }, // Q3: 及第 (80点以上)
-  { quality: 2 as const, minScore: 30 }, // Q2: 要注意 (30点以上)
-  { quality: 1 as const, minScore: 1 }, // Q1: 欠落 (0点超 = 1点以上)
+  { quality: 2 as const, minScore: 50 }, // Q2: 要注意 (30点以上)
+  { quality: 1 as const, minScore: 30 }, // Q1: 欠落 (0点超 = 1点以上)
 ];
 
 // STARモードの最大値（厳密な型定義で使用）

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { createEmptyLearningTarget } from '@/features/app/learningTarget/functions/create/create-empty-learning-target';
 import { updateLearningTargetMainState } from '@/features/app/learningTarget/functions/update/update-main-state';
+import { UserEvaluationModal } from '@/features/evaluation/components/UserEvaluationModal';
 import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
 import { Welcome } from '../components/Welcome/Welcome';
 
@@ -21,6 +22,7 @@ export function HomePage() {
 
   return (
     <>
+      <UserEvaluationModal opened onClose={() => {}} onSubmit={() => {}} targetTitle="Title" />
       <Welcome />
       <ColorSchemeToggle />
     </>

@@ -429,6 +429,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
+  version: 7.28.4
+  resolution: "@babel/runtime@npm:7.28.4"
+  checksum: 10c0/792ce7af9750fb9b93879cc9d1db175701c4689da890e6ced242ea0207c9da411ccf16dc04e689cc01158b28d7898c40d75598f4559109f761c12ce01e959bf7
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.25.9":
   version: 7.25.9
   resolution: "@babel/template@npm:7.25.9"
@@ -1435,7 +1442,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/core@npm:8.3.9":
+"@mantine/carousel@npm:^8.3.9":
+  version: 8.3.9
+  resolution: "@mantine/carousel@npm:8.3.9"
+  peerDependencies:
+    "@mantine/core": 8.3.9
+    "@mantine/hooks": 8.3.9
+    embla-carousel: ">=8.0.0"
+    embla-carousel-react: ">=8.0.0"
+    react: ^18.x || ^19.x
+    react-dom: ^18.x || ^19.x
+  checksum: 10c0/8775b8c7b270ba92f4c18ae7538d622fdbb3bb7b80c1fe38b96334ea7e72e14af281a540d2052f2e8c33794d97f527759fd2e8f6f403e409299366fcaa4e801c
+  languageName: node
+  linkType: hard
+
+"@mantine/core@npm:^8.3.9":
   version: 8.3.9
   resolution: "@mantine/core@npm:8.3.9"
   dependencies:
@@ -1453,12 +1474,74 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/hooks@npm:8.3.9":
+"@mantine/form@npm:^8.3.9":
+  version: 8.3.9
+  resolution: "@mantine/form@npm:8.3.9"
+  dependencies:
+    fast-deep-equal: "npm:^3.1.3"
+    klona: "npm:^2.0.6"
+  peerDependencies:
+    react: ^18.x || ^19.x
+  checksum: 10c0/33f9a92cc4305c561d88b1d0631bc1aa667de6e32b49804c1d553e0adff74f359caa321da886bb24245f20ac7b8f3c66e217bd908b7926f3de9075519453ece4
+  languageName: node
+  linkType: hard
+
+"@mantine/hooks@npm:^8.3.9":
   version: 8.3.9
   resolution: "@mantine/hooks@npm:8.3.9"
   peerDependencies:
     react: ^18.x || ^19.x
   checksum: 10c0/c414ea2b8b725a40a3115cbd1346d43f68b350a1b6472295a72e346c19bc06b524b13915dbeda73a0f29c391868413ff77bc2afeb8b28a1c950945bc725ad50c
+  languageName: node
+  linkType: hard
+
+"@mantine/modals@npm:^8.3.9":
+  version: 8.3.9
+  resolution: "@mantine/modals@npm:8.3.9"
+  peerDependencies:
+    "@mantine/core": 8.3.9
+    "@mantine/hooks": 8.3.9
+    react: ^18.x || ^19.x
+    react-dom: ^18.x || ^19.x
+  checksum: 10c0/2dc94a565af7c0d66858a4d9db626c783cca7d0acb41cc8170850b8466204693783b20d7c0ffbab325ea1a5cfde774bb1943bfce7c89924d0e6cb22e82ad1202
+  languageName: node
+  linkType: hard
+
+"@mantine/notifications@npm:^8.3.9":
+  version: 8.3.9
+  resolution: "@mantine/notifications@npm:8.3.9"
+  dependencies:
+    "@mantine/store": "npm:8.3.9"
+    react-transition-group: "npm:4.4.5"
+  peerDependencies:
+    "@mantine/core": 8.3.9
+    "@mantine/hooks": 8.3.9
+    react: ^18.x || ^19.x
+    react-dom: ^18.x || ^19.x
+  checksum: 10c0/03c31939a4d8833b1269455c6062d9dd6b55139d5806cafd88cdf956ec79e843b05c91b6e7d7f80c0001ccab9b76e366c0b13671878ddbf17e6d379578541a99
+  languageName: node
+  linkType: hard
+
+"@mantine/nprogress@npm:^8.3.9":
+  version: 8.3.9
+  resolution: "@mantine/nprogress@npm:8.3.9"
+  dependencies:
+    "@mantine/store": "npm:8.3.9"
+  peerDependencies:
+    "@mantine/core": 8.3.9
+    "@mantine/hooks": 8.3.9
+    react: ^18.x || ^19.x
+    react-dom: ^18.x || ^19.x
+  checksum: 10c0/cb9e43114694c470e2744f1daa0c9e4c4faaca002f0f438a6c06a846ae285aa7f42c812753d098c265080bca98dce3bdaf655106e07abb9b49299a0fbbd3314e
+  languageName: node
+  linkType: hard
+
+"@mantine/store@npm:8.3.9":
+  version: 8.3.9
+  resolution: "@mantine/store@npm:8.3.9"
+  peerDependencies:
+    react: ^18.x || ^19.x
+  checksum: 10c0/00e190088e692dfe4063baf211a1d33f770d471ab09819f3efd0ad4b3dbe53df65463a5133be4746215098df56af2f4faac8366684307f7020014743d3209943
   languageName: node
   linkType: hard
 
@@ -1810,6 +1893,24 @@ __metadata:
     typescript:
       optional: true
   checksum: 10c0/d9f0af445f027fcf757c866320932299adf65dbb9f215c09b853ef0b5e9c49edb9e68f06ac3b15b026999fc8f1cb917ddf15dee44f04c71ede079c64c44140e3
+  languageName: node
+  linkType: hard
+
+"@tabler/icons-react@npm:^3.35.0":
+  version: 3.35.0
+  resolution: "@tabler/icons-react@npm:3.35.0"
+  dependencies:
+    "@tabler/icons": "npm:3.35.0"
+  peerDependencies:
+    react: ">= 16"
+  checksum: 10c0/8d280fcdae00916b001142ba0800ea05d8fa2acdcbd82f88a299b4141fb941237be2e826b86b1af710e038b4f8bb6f76f452c3309c29fd62398b4d5789c2b3e0
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:3.35.0":
+  version: 3.35.0
+  resolution: "@tabler/icons@npm:3.35.0"
+  checksum: 10c0/93098828128ffed2cf412b39bd78992f93f25b22349a4e04523d2a018b7fe376ddeff105babcc3efedd707aa00b705425c7d9f598d6987552a563c62125795a2
   languageName: node
   linkType: hard
 
@@ -3101,7 +3202,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csstype@npm:^3.2.2":
+"csstype@npm:^3.0.2, csstype@npm:^3.2.2":
   version: 3.2.3
   resolution: "csstype@npm:3.2.3"
   checksum: 10c0/cd29c51e70fa822f1cecd8641a1445bed7063697469d35633b516e60fe8c1bde04b08f6c5b6022136bb669b64c63d4173af54864510fbb4ee23281801841a3ce
@@ -3321,6 +3422,16 @@ __metadata:
   version: 0.6.3
   resolution: "dom-accessibility-api@npm:0.6.3"
   checksum: 10c0/10bee5aa514b2a9a37c87cd81268db607a2e933a050074abc2f6fa3da9080ebed206a320cbc123567f2c3087d22292853bdfdceaffdd4334ffe2af9510b29360
+  languageName: node
+  linkType: hard
+
+"dom-helpers@npm:^5.0.1":
+  version: 5.2.1
+  resolution: "dom-helpers@npm:5.2.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.8.7"
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/f735074d66dd759b36b158fa26e9d00c9388ee0e8c9b16af941c38f014a37fc80782de83afefd621681b19ac0501034b4f1c4a3bff5caa1b8667f0212b5e124c
   languageName: node
   linkType: hard
 
@@ -5638,6 +5749,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"klona@npm:^2.0.6":
+  version: 2.0.6
+  resolution: "klona@npm:2.0.6"
+  checksum: 10c0/94eed2c6c2ce99f409df9186a96340558897b3e62a85afdc1ee39103954d2ebe1c1c4e9fe2b0952771771fa96d70055ede8b27962a7021406374fdb695fd4d01
+  languageName: node
+  linkType: hard
+
 "known-css-properties@npm:^0.36.0":
   version: 0.36.0
   resolution: "known-css-properties@npm:0.36.0"
@@ -5835,11 +5953,17 @@ __metadata:
   dependencies:
     "@eslint/js": "npm:^9.37.0"
     "@ianvs/prettier-plugin-sort-imports": "npm:^4.7.0"
-    "@mantine/core": "npm:8.3.9"
-    "@mantine/hooks": "npm:8.3.9"
+    "@mantine/carousel": "npm:^8.3.9"
+    "@mantine/core": "npm:^8.3.9"
+    "@mantine/form": "npm:^8.3.9"
+    "@mantine/hooks": "npm:^8.3.9"
+    "@mantine/modals": "npm:^8.3.9"
+    "@mantine/notifications": "npm:^8.3.9"
+    "@mantine/nprogress": "npm:^8.3.9"
     "@storybook/addon-themes": "npm:^10.0.0"
     "@storybook/react": "npm:^10.0.0"
     "@storybook/react-vite": "npm:^10.0.0"
+    "@tabler/icons-react": "npm:^3.35.0"
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/jest-dom": "npm:^6.9.1"
     "@testing-library/react": "npm:^16.3.0"
@@ -6629,7 +6753,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.8.1":
+"prop-types@npm:^15.6.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -6839,6 +6963,21 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   checksum: 10c0/3a924db59259a6e3b834dcddc12a8661b43dcdaa1b43c41c732e0548bb2761e9a53dbc6db4e0d9e237728b4869e42c25e5417408b0391aec290c90874733a09f
+  languageName: node
+  linkType: hard
+
+"react-transition-group@npm:4.4.5":
+  version: 4.4.5
+  resolution: "react-transition-group@npm:4.4.5"
+  dependencies:
+    "@babel/runtime": "npm:^7.5.5"
+    dom-helpers: "npm:^5.0.1"
+    loose-envify: "npm:^1.4.0"
+    prop-types: "npm:^15.6.2"
+  peerDependencies:
+    react: ">=16.6.0"
+    react-dom: ">=16.6.0"
+  checksum: 10c0/2ba754ba748faefa15f87c96dfa700d5525054a0141de8c75763aae6734af0740e77e11261a1e8f4ffc08fd9ab78510122e05c21c2d79066c38bb6861a886c82
   languageName: node
   linkType: hard
 

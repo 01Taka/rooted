@@ -62,7 +62,10 @@ export function updateLearningTargetMainState(
           sproutingPromotionCount:
             result.newSproutingCount ??
             (current.state as TargetModeSprouting).sproutingPromotionCount,
-          lastCountIncrementedAt: now,
+          lastCountIncrementedAt:
+            result.newSproutingCount !== undefined
+              ? now
+              : (current.state as TargetModeSprouting).lastCountIncrementedAt,
         } as TargetModeSprouting;
       } else {
         newState = {
@@ -71,7 +74,10 @@ export function updateLearningTargetMainState(
           sproutingPromotionCount:
             result.newSproutingCount ??
             (current.state as SplitModeSprouting).sproutingPromotionCount,
-          lastCountIncrementedAt: now,
+          lastCountIncrementedAt:
+            result.newSproutingCount !== undefined
+              ? now
+              : (current.state as SplitModeSprouting).lastCountIncrementedAt,
         } as SplitModeSprouting;
       }
       break;
